@@ -52,9 +52,13 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.apk
+apk
 *.unitypackage
 
 # Crashlytics generated file
 crashlytics-build.properties
 
+GoogleVR/
+TextMesh Pro/
+Temp/
+Library/
