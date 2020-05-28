@@ -29,16 +29,9 @@ public class UI : MonoBehaviour
         
     }
 
-    public void isOn(bool value)
+    public void IsOn(bool value)
     {
-        if (value == true)
-        {
-            Debug.Log(value);
-        }
-        if (value == false)
-        {
-            Debug.Log(value);
-        }
+        
     }
 
     public void gender()
