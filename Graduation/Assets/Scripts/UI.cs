@@ -5,50 +5,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using GraduationVR;
 
-public class UI : MonoBehaviour
+namespace GraduationVR
 {
-    
-    public TMP_InputField NameField;
-    public Button JoinGame;
-    public string theScene = "MainScene";
-    public Toggle boolGraduate;
-    public TMP_Dropdown genderSelect;
-
-    // Start is called before the first frame update
-    void Start()
+    public class UI : MonoBehaviour
     {
-    }
 
-    public void changeTheScene()
-    {
-        if (NameField.text != "") 
+        public TMP_InputField IDField;
+        public Button JoinGame;
+        public string theScene = "MainScene";
+
+        // Start is called before the first frame update
+        void Start()
         {
-            SceneManager.LoadScene(theScene);
         }
-        
-    }
 
-    public void IsOn(bool value)
-    {
-        
-    }
-
-    public void gender()
-    {
-        if(genderSelect.value == 1)
+        public void changeTheScene()
         {
-            Debug.Log(genderSelect.value);
-        }
-        if (genderSelect.value == 0)
-        {
-            Debug.Log(genderSelect.value);
-        }
-    }
+            if (IDField.text != "")
+            {
+                SceneManager.LoadScene(theScene);
+            }
 
-    // Update is called once per frame
-    void Update()
-    {
-        string name = NameField.text;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            //string id = IDField.text;
+           var task = getDatabase.RetrieveRecord("Hackers", "recKg4RTxeXjQWVbC");
+           IDField.text = task.Result.ToString();
+        }
     }
 }
