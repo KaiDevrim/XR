@@ -6,58 +6,40 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using GraduationVR;
+using System.Net.Http;
+using System.Net;
+using System.IO;
 
 namespace GraduationVR
 {
     public class getDatabase : MonoBehaviour
     {
-        public static async Task<AirtableRetrieveRecordResponse> RetrieveRecord(string tableName, string id)
-        {
             string baseId = "appBtHGya4eSsk4Af";
             string appKey = System.IO.File.ReadAllText(@"C:\Users\Devrim\Desktop\appkey.txt");
+            HttpClient client = new HttpClient();
+            protected string api = "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/recKg4RTxeXjQWVbC";
 
+        public string Get()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api);
+            var headers = request.Headers[$"Authorization: Bearer {appKey}"];
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-            using (AirtableBase airtableBase = new AirtableBase(appKey, baseId))
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
             {
-                Task<AirtableRetrieveRecordResponse> task = airtableBase.RetrieveRecord(tableName, id);
-                var response = await task;
-                if (!response.Success)
-                {
-                    string errorMessage = null;
-
-                    if (response.AirtableApiError is AirtableApiException)
-                    {
-                        errorMessage = response.AirtableApiError.ErrorMessage;
-                        Console.WriteLine(errorMessage);
-
-                    }
-                    else
-                    {
-                        errorMessage = "Unknown error";
-                        Console.WriteLine(errorMessage);
-                    }
-                    // Report errorMessage
-                }
-                else
-                {
-                    var record = response.Record;
-                    // Do something with your retrieved record.
-                    // Such as getting the attachmentList of the record if you
-                    // know the Attachment field name
-                    var attachmentList = response.Record.GetAttachmentField("Name");
-                }
-                Console.WriteLine(response);
-                return response;
-
+                return reader.ReadToEnd();
             }
-
-            Console.WriteLine("OK 2");
         }
         public void Awake()
         {
-            var task = RetrieveRecord("Hackers", "recKg4RTxeXjQWVbC");
+            //var responseString = await client.GetStringAsync("http://www.example.com/recepticle.aspx");
+            /*var task = RetrieveRecord("Hackers", "recKg4RTxeXjQWVbC");
             Console.WriteLine("This is the task1" + task);
-            Console.WriteLine("This is the task2" + task.Result);
+            Console.WriteLine("This is the task2" + task.Result);*/
+
+
         }
     }
 }
