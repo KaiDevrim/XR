@@ -19,18 +19,12 @@ namespace GraduationVR
             HttpClient client = new HttpClient();
             protected string api = "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/recKg4RTxeXjQWVbC";
 
-        public string Get()
+        public async Task<string> GetAsync()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api);
-            var headers = request.Headers[$"Authorization: Bearer {appKey}"];
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + appKey);
+            var response = await client.GetAsync(api);
+            Console.WriteLine(response);
+            return response.ToString();
         }
         public void Awake()
         {
@@ -38,11 +32,8 @@ namespace GraduationVR
             /*var task = RetrieveRecord("Hackers", "recKg4RTxeXjQWVbC");
             Console.WriteLine("This is the task1" + task);
             Console.WriteLine("This is the task2" + task.Result);*/
-
+            GetAsync();
 
         }
     }
 }
-
-//
-//

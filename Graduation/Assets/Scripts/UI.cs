@@ -34,8 +34,8 @@ namespace GraduationVR
         void Update()
         {
             //string id = IDField.text;
-           var task = getDatabase.RetrieveRecord("Hackers", "recKg4RTxeXjQWVbC");
-           IDField.text = task.Result.ToString();
+           
+           //IDField.text = task.Result.ToString();
         }
     }
 }
