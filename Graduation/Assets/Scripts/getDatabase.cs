@@ -12,6 +12,7 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 namespace GraduationVR
 {
@@ -72,6 +73,8 @@ namespace GraduationVR
         static HttpClient client = new HttpClient();
         public static string theScene = "MainScene";
         public Button JoinGame;
+        public TMP_InputField wrongID;
+        
 
         public static async Task onClick(string appKey, string api)
         {
@@ -120,9 +123,13 @@ namespace GraduationVR
                         }
                     }
                 }
+                else
+                {
+                    //wrongID.enabled = true;
+                }
             }
         }
-        public static void notOnClick()
+        public void notOnClick()
         {
             string key = System.IO.File.ReadAllText(@"C:\Users\Devrim\Desktop\appkey.txt");
             onClick(key, "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/");
