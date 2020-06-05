@@ -11,6 +11,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace GraduationVR
 {
@@ -70,50 +71,10 @@ namespace GraduationVR
         
         static HttpClient client = new HttpClient();
         public static string theScene = "MainScene";
+        public Button JoinGame;
 
-        public static async Task<string> GetAsync(string baseId, string appKey, string api)
+        public static async Task onClick(string appKey, string api)
         {
-            // Set the Headers
-            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + appKey);
-
-            //Get the entire response from the API
-            var response = await client.GetAsync(api);
-
-            //Checks for if the api allows the request
-            if (response.IsSuccessStatusCode)
-            {
-                Debug.Log("Success");
-
-                //Save the response as a string to a variable called emptyResponse of type string
-                var emptyReponse = await response.Content.ReadAsStringAsync();
-
-                //Allows me to basically have the program understand each part of the API's JSON
-                Empty empty = JsonConvert.DeserializeObject<Empty>(emptyReponse);
-
-                Debug.Log(empty.Records[0].Fields.Name);
-
-                //Saves the ID thats in the UI field to a variable
-                
-
-                    //Just a blanket return statement that will make it give back the current user's name
-                    return empty.Records[0].Fields.Name;
-               }
-
-
-            else
-            {
-                //If the response code is not a success
-                Debug.Log("Not Success");
-                return "False";
-            }
-
-
-        }
-
-        public async Task onClick()
-        {
-            string appKey = System.IO.File.ReadAllText(@"C:\Users\Devrim\Desktop\appkey.txt");
-            string api = "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/";
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + appKey);
             var response = await client.GetAsync(api);
 
@@ -161,14 +122,11 @@ namespace GraduationVR
                 }
             }
         }
-
-        public async Task Start()
+        public static void notOnClick()
         {
-            //Get the appkey from a text file on my desktop
-            //TODO implement a better system of getting this text file
             string key = System.IO.File.ReadAllText(@"C:\Users\Devrim\Desktop\appkey.txt");
-            //Call the big boi method with the params of the baseID, the appkey, and the airtable url
-            await GetAsync("appBtHGya4eSsk4Af", key, "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/");
+            onClick(key, "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/");
         }
+
     }
 }
