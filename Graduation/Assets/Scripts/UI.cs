@@ -14,28 +14,19 @@ namespace GraduationVR
 
         public TMP_InputField IDField;
         public Button JoinGame;
-        public string theScene = "MainScene";
+        public static string uiID;
 
-        // Start is called before the first frame update
-        void Start()
+
+        public void getText()
         {
+            uiID = IDField.text;
+            Debug.Log(uiID);
         }
 
-        public void changeTheScene()
+        public void changeScene()
         {
-            if (IDField.text != "")
-            {
-                SceneManager.LoadScene(theScene);
-            }
 
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-            //string id = IDField.text;
-           
-           //IDField.text = task.Result.ToString();
-        }
+        
     }
 }
