@@ -1,11 +1,8 @@
 ﻿using System;
-using AirtableApiClient;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using GraduationVR;
 using System.Net.Http;
 using System.Net;
 using System.IO;
@@ -13,61 +10,11 @@ using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using SimpleJSON;
 
 namespace GraduationVR
 {
-    public partial class Empty
-    {
-        [JsonProperty("records")]
-        public List<Record> Records { get; set; }
-
-        [JsonProperty("offset")]
-        public string Offset { get; set; }
-    }
-
-    public partial class Record
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("fields")]
-        public Fields Fields { get; set; }
-
-        [JsonProperty("createdTime")]
-        public DateTimeOffset CreatedTime { get; set; }
-    }
-
-    public partial class Fields
-    {
-        [JsonProperty("Name")]
-        public string Name { get; set; }
-
-        [JsonProperty("isGraduating")]
-        public string IsGraduating { get; set; }
-
-        [JsonProperty("Player Model")]
-        public List<PlayerModel> PlayerModel { get; set; }
-    }
-
-    public partial class PlayerModel
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("url")]
-        public Uri Url { get; set; }
-
-        [JsonProperty("filename")]
-        public string Filename { get; set; }
-
-        [JsonProperty("size")]
-        public long Size { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-    }
-
-    public class getDatabase : MonoBehaviour
+    public class StartMenu : MonoBehaviour
     {
         
         static HttpClient client = new HttpClient();
@@ -122,10 +69,6 @@ namespace GraduationVR
                             Debug.Log(remoteUri);
                         }
                     }
-                }
-                else
-                {
-                    //wrongID.enabled = true;
                 }
             }
         }
