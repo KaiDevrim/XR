@@ -12,6 +12,7 @@ using UnityEngine.Networking;
 using Boo.Lang.Environments;
 using SimpleJSON;
 using System.Linq;
+using System.IO;
 
 namespace GraduationVR
 {
@@ -68,9 +69,9 @@ namespace GraduationVR
         public TMP_InputField IDField;
         public Button JoinGame;
         public static string uiID;
-        public TMP_InputField wrongID;
+        //public TMP_InputField wrongID;
 
-        public IEnumerator getPlayerModel(string id)
+        public IEnumerator getDatabase()
         {
             string api = "https://api.airtable.com/v0/appBtHGya4eSsk4Af/Table%201/";
             string appKey = System.IO.File.ReadAllText(@"C:\Users\Devrim\Desktop\appkey.txt");
@@ -88,37 +89,63 @@ namespace GraduationVR
             }
 
             JSONNode webInfo = JSON.Parse(myWebRequest.downloadHandler.text);
-            string myID = IDField.text;
 
-            //Selects the correct person's part of the JSON based on the UI field's ID
-            var record = webInfo["records"]["id"].Linq.FirstOrDefault(r => r.Id == myID);
+ 
+            Empty empty = JsonConvert.DeserializeObject<Empty>(webInfo);
+            var record = empty.Records.FirstOrDefault(r => r.Id == uiID);
 
-            string playerID = webInfo["records"]["id"];
-            string playerName = webInfo["records"]["fields"]["Name"];
-            string playergraduating = webInfo["records"]["fields"]["isGraduting"];
-            string playerModelURL = webInfo["records"]["fields"]["Player Model"]["url"];
             bool isGraduating;
             
-            if (playergraduating == "No")
+            if (empty.Records[0].Fields.IsGraduating == "No")
             {
                 isGraduating = false;
             }
-            else if (playergraduating == "Yes")
+            else if (empty.Records[0].Fields.IsGraduating == "Yes")
             {
                 isGraduating = true;
             }
 
+            if (record != null)
+            {
+                Debug.Log(empty.Records[0].Fields.Name);
+
+                UnityWebRequest getModel = new UnityWebRequest(empty.Records[0].Fields.PlayerModel[0].Url);
+                getModel.SetRequestHeader("Authorization", "Bearer " + appKey);
+                //Get the URL of the playermodel
+                var remoteUri = record.Fields.PlayerModel[0].Url;
+
+                //TODO Update this comment to include the actual path of the fbx
+                string FilePath = Path.Combine(Application.persistentDataPath, empty.Records[0].Fields.PlayerModel[0].Id + ".fbx");
+                getModel.downloadHandler = new DownloadHandlerFile(FilePath);
+
+                yield return getModel.SendWebRequest();
+                if (getModel.isNetworkError || getModel.isHttpError)
+                {
+                    Debug.LogError(getModel.error);
+                }
+                else
+                {
+                    Debug.Log("File successfully downloaded and saved to " + FilePath);
+                    SceneManager.LoadScene("MainScene");
+                }
+            }
+
+            else
+            {
+                Debug.Log("Record is null");
+            }
 
         }
+
         public void getText()
         {
             uiID = IDField.text;
             Debug.Log(uiID);
         }
 
-        public void changeScene()
+        public void onClick()
         {
-
+            StartCoroutine(getDatabase());
         }
         
     }
